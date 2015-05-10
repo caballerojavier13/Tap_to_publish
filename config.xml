@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="com.coolappz.HTML5Application" version="1.0.0">
+    <name>HTML5Application</name>
+    <description>
+        
+    </description>
+    <author email="caballerojavier13@gmail.com" href="http://www.javiercaballero.com.ar">
+        Javier Caballero
+    </author>
+    <content src="index.html"/>
+    <access origin="*"/>
+</widget>

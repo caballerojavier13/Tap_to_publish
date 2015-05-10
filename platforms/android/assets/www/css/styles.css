@@ -1,0 +1,85 @@
+textarea {
+    margin-bottom: 0px !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: 150px !important;
+}​
+
+body {
+    padding: 20px;
+}
+
+hr {
+    margin: 20px 0;
+    border: 0;
+    border-bottom: 1px solid #eee;
+    background: #999;
+}
+
+.ui-header{
+    padding-top: 26px;
+}
+
+.ui-header > .ui-btn{
+    top: 30px !important;
+    left: 16px !important;
+}
+
+.ios-status-bar{
+    position: fixed;
+    width: 100%;    
+    height: 20px;    
+    background: black;
+    z-index: 10;
+}
+
+#userName{
+    color: white;
+    font-size: 20px;
+}
+
+#userPic{
+    float: left;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: solid 1px black;
+}
+
+#user{
+    height: 50px; 
+    padding-top: 0px; 
+    padding-bottom: 10px;
+}
+
+#viewer_userPic_large{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: black;
+    display: none;
+}
+
+#userPic_large{
+    position: absolute;
+    top: 50%;
+    margin-top: -100px;
+    left: 50%;
+    margin-left: -100px;
+    border-radius: 10px;
+}
+
+#viewer_userPic_large > .ui-btn{
+    width: 50px;
+    top: 30px;
+    height: 30px;
+    padding: 2px;
+    font-size: 14px;
+    line-height: 22px;
+    position: absolute;
+    right: 20px;
+    background: #444;
+    color: #E0E0E0;
+    border: solid 2px gray;
+}
