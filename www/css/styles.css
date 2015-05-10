@@ -135,13 +135,14 @@ input[type=checkbox] {
     background: none repeat scroll 0% 0% rgba(0, 0, 0, 0.8);
     border-radius: 25px;
     z-index: 1000;    
+    display: none;
 }
 #alert > p{
     position: relative;
     top: 70px;
     text-align: center;
     color: #FFF;
-    line-height: 32px;
-    font-size: 20px;
+    line-height: 44px;
+font-size: 25px;
     vertical-align: middle;
 }

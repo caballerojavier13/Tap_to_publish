@@ -63,6 +63,11 @@ function shareFB() {
             success: function () {
                 $("#Message").val("");
                 hide_loading();
+                $("#alert").show();
+                setTimeout(function(){
+                    $("#alert").hide(); 
+                }, 3000);
+                
             },
             error: function (error) {
                 hide_loading();
@@ -113,6 +118,10 @@ $("#userPic").on("click", function () {
 
 $("#viewer_userPic_large > input").on("click", function () {
     $("#viewer_userPic_large").hide();
+});
+
+$("#alert").on("click",function(){
+    $("#alert").hide();
 });
 
 $("#Message").on("keyup", function () {
@@ -231,3 +240,5 @@ function control_To_Social(){
         $("#length_msg").hide();
     }
 }
+
+
