@@ -1,86 +1,37 @@
+<!-- ********************* BEGIN *********************** -->
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <title>Tap to Publish</title>
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-        <link rel="stylesheet" href="css/ratchet.css">
-        <link rel="stylesheet" href="css/styles.css">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <link href="css/jquery.mobile-git.css" rel="stylesheet" type="text/css" />
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING from Cordova: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title></title>
+
+        <script type="text/javascript" charset="utf-8" src="js/vendor/cordova.js"></script> 
+
+<!-- ********************* BEGIN *********************** -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING from Cordova: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title></title>
+
         <script src="js/vendor/jquery.min.js"></script>
-        <script src="js/vendor/jquery.mobile-1.4.5.min.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            $(document).ready(function () {
+               //localStorage.myname = "Greg";
+               alert(localStorage.myname);
+            });
+
+        </script>
+
     </head>
     <body>
 
-        <!-- Page: home  -->
-        <div id="home" data-role="page" style="background:#069;">
-            <span class="ios-status-bar"></span>
-            <div data-role="header" data-theme="b" data-fullscreen="false">
-                <a class="ui-btn ui-icon-gear ui-btn-icon-notext ui-corner-all" href="#config" data-transition="slide" data-direction="reverse"></a>
-                <h3>Tap to Publish</h3>
-            </div>
-            <div role="main" class="ui-content">
-                <div id="home_login">
-
-                </div>
-
-                <div id="home_no_login">
-                    <button class="btn btn-block" onclick="getInfo()" style="display: none;">Get My Info</button>
-                    <div id="user">
-                        <img id="userPic" width="50" height="50" src="css/images/ajax-loader2.gif" />
-                        <p id="userName"></p>
-                    </div>
-                    <hr/>
-
-                    <textarea id="Message" placeholder="What's on your mind?" rows="10"></textarea>
-                    
-                    <div class="ui-field-contain">
-                        <fieldset data-role="controlgroup" data-type="horizontal">
-                            <input type="checkbox" name="to_face" id="to_face" class="my_check">
-                            <label for="to_face" id="to_face_label" class="my_check_label"><img src="img/icon_facebook_gray.png" width="32" /></label>
-
-                            <input type="checkbox" name="to_twitt" id="to_twitt" class="my_check">
-                            <label for="to_twitt" id="to_twitt_label" class="my_check_label"><img src="img/icon_twitter_gray.png" width="32"/></label>
-                        </fieldset>
-                        <div id="length_msg">0</div>
-                    </div>
-                    <button class="btn btn-block" onclick="share()" id="btn_Message" disabled="true">Share</button> 
-                </div>
-                
-                <div id="alert">
-                    <p>Publishing successful</p>
-                </div>
-
-                <div id="viewer_userPic_large">
-                    <input type="button" value="Done"/>
-                    <img id="userPic_large"/>
-                </div>
-
-            </div>
-        </div>
-        <!-- Page: Config  -->
-        <div id="config" data-role="page" style="background:#069;">
-            <span class="ios-status-bar"></span>
-            <div data-role="header" data-theme="b" data-fullscreen="false">
-                <a class="ui-btn ui-icon-home ui-btn-icon-notext ui-corner-all" href="#home" data-transition="slide" id="btn_to_home"></a>
-                <h3>Configuration</h3>
-            </div>
-            <div role="main" class="ui-content">
-
-                <button class="btn btn-block" onclick="loginFB()" id="login_fb">Login with Facebook</button>
-
-                <button class="btn btn-block" onclick="logoutFB()"id="logout_fb">Logout for Facebook</button>
-            </div>
-        </div>
-
-
-        <!--cordova.js is automatically injected by the Cordova build process-->
-        <script src="cordova.js"></script>
-
-        <script src="js/vendor/openfb.js"></script>
-
-        <script src="js/main.js"></script>
-
     </body>
 </html>
+<!-- ********************* END *********************** -->

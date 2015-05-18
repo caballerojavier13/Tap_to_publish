@@ -141,7 +141,7 @@ var openFB = (function () {
         startTime = new Date().getTime();
 //        loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + fbAppId + '&redirect_uri=' + oauthRedirectURL +
 //                '&response_type=token&scope=' + scope, '_blank', 'location=no');
-        url = FB_LOGIN_URL + '?client_id=' + fbAppId + '&redirect_uri=' + oauthRedirectURL +
+        url = FB_LOGIN_URL + '?client_id=' + fbAppId + '&redirect_uri=' + logoutRedirectURL +
                 '&response_type=token&scope=' + scope, '_blank', 'location=no';
 
         window.location = url;
@@ -196,10 +196,11 @@ var openFB = (function () {
 
         /* Remove token. Will fail silently if does not exist */
         tokenStore.removeItem('fbtoken');
+        localStorage.tokenStore = '';
 
         if (token) {
-            logoutWindow = FB_LOGOUT_URL + '?access_token=' + token + '&next=' + logoutRedirectURL, '_blank', 'location=no';
-            window.location = logoutWindow;
+            //logoutWindow = FB_LOGOUT_URL + '?access_token=' + token + '&next=' + logoutRedirectURL, '_blank', 'location=no';
+            window.location.reload();
 //            if (runningInCordova) {
 //                setTimeout(function () {
 //                    logoutWindow.close();

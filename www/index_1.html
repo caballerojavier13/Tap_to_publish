@@ -1,86 +1,289 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title></title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
         <meta charset="utf-8">
-        <title>Tap to Publish</title>
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-        <link rel="stylesheet" href="css/ratchet.css">
-        <link rel="stylesheet" href="css/styles.css">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <link href="css/jquery.mobile-git.css" rel="stylesheet" type="text/css" />
+
+        <script src="js/vendor/ChildBrowser.js"></script>
         <script src="js/vendor/jquery.min.js"></script>
-        <script src="js/vendor/jquery.mobile-1.4.5.min.js"></script>
+        <script src="js/vendor/jsOAuth-1.3.6.min.js"></script>
+        <script type="text/javascript">
+
+            function onBodyLoad() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+            }
+
+            function onDeviceReady() {
+                var root = this;
+                cb = window.plugins.childBrowser;
+                if (!localStorage.getItem(twitterKey)) {
+                    $("#loginBtn").show();
+                    $("#logoutBtn").hide();
+                }
+                else {
+                    $("#loginBtn").hide();
+                    $("#logoutBtn").show();
+                }
+
+                if (cb != null) {
+                    cb.onLocationChange = function (loc) {
+                        root.locChanged(loc);
+                    };
+                    cb.onClose = function () {
+                        root.onCloseBrowser()
+                    };
+                    cb.onOpenExternal = function () {
+                        root.onOpenExternal();
+                    };
+                }
+            }
+
+            function onCloseBrowser() {
+                console.log("onCloseBrowser!");
+            }
+
+            function locChanged(loc) {
+                console.log("locChanged!");
+            }
+
+            function onOpenExternal() {
+                console.log("onOpenExternal!");
+            }
+
+        </script>
+        <!--Below is the code for twitter-->
+        <script>
+            // GLOBAL VARS
+            var oauth; // It Holds the oAuth data request
+            var requestParams; // Specific param related to request
+            var options = {
+                consumerKey: 'dWLNF5yv9bVbZxB7TI87aLjTO', // YOUR Twitter CONSUMER_KEY
+                consumerSecret: ' sUIGOsHZXzcjd0NROvWbH82xrkziU0v4BQlyx18kO3HZxeG8Xx', // YOUR Twitter CONSUMER_SECRET
+                callbackUrl: "http://192.168.10.112:8383/HTML5Application/index_1.html"}; // YOU have to replace it on one more Place                   
+            var twitterKey = ""; // This key is used for storing Information related
+
+
+            var Twitter = {
+                init: function () {
+                    // Apps storedAccessData , Apps Data in Raw format
+                    var storedAccessData, rawData = localStorage.getItem(twitterKey);
+                    // here we are going to check whether the data about user is already with us.
+                    //if (localStorage.getItem(twitterKey) !== null) {
+                    if (twitterKey !== "") {
+                        // when App already knows data
+                        storedAccessData = JSON.parse(rawData); //JSON parsing
+                        //options.accessTokenKey = storedAccessData.accessTokenKey; // data will be saved when user first time signin
+                        options.accessTokenSecret = storedAccessData.accessTokenSecret; // data will be saved when user first first signin
+
+                        // javascript OAuth take care of everything for app we need to provide just the options
+                        oauth = OAuth(options);
+                        oauth.get('https://api.twitter.com/1/account/verify_credentials.json?skip_status=true',
+                                function (data) {
+                                    var entry = JSON.parse(data.text);
+                                    console.log("USERNAME: " + entry.screen_name);
+                                }
+                        );
+                    }
+                    else {
+                        // we have no data for save user
+                        console.log(options);
+                        $.post("https://api.twitter.com/oauth/request_token", options, function(data){
+                            alert(data.text);
+                        });
+                        
+                        //oauth = OAuth(options);
+                        //oauth.post('https://api.twitter.com/oauth/request_token',
+                        //        function (data) {
+                                  //  requestParams = data.text;
+                                //    window.location = 'https://api.twitter.com/oauth/authorize?' + data.text;
+                                    // cb.showWebPage('https://api.twitter.com/oauth/authorize?' + data.text); // This opens the Twitter authorization / sign in page
+                                    //cb.onLocationChange = function (loc) {
+                                    //    Twitter.success(loc);
+                                    //}; // Here will will track the change in URL of ChildBrowser
+                             //   },
+                        //        function (data) {
+                            //        console.log("ERROR: " + data);
+                          //      }
+                        //);
+                    }
+                },
+                /*
+                 When ChildBrowser's URL changes we will track it here.
+                 We will also be acknowledged was the request is a successful or unsuccessful
+                 */
+                success: function (loc) {
+
+                    // Here the URL of supplied callback will Load
+
+                    /*
+                     Here Plugin will check whether the callback Url matches with the given Url
+                     */
+                    if (loc.indexOf("http://Your-callback-URL/?") >= 0) {
+
+                        // Parse the returned URL
+                        var index, verifier = '';
+                        var params = loc.substr(loc.indexOf('?') + 1);
+
+                        params = params.split('&');
+                        for (var i = 0; i < params.length; i++) {
+                            var y = params[i].split('=');
+                            if (y[0] === 'oauth_verifier') {
+                                verifier = y[1];
+                            }
+                        }
+
+                        // Here we are going to change token for request with token for access
+
+                        /*
+                         Once user has authorised us then we have to change the token for request with token of access
+                         here we will give data to localStorage.
+                         */
+                        oauth.get('https://api.twitter.com/oauth/access_token?oauth_verifier=' + verifier + '&' + requestParams,
+                                function (data) {
+                                    var accessParams = {};
+                                    var qvars_tmp = data.text.split('&');
+                                    for (var i = 0; i < qvars_tmp.length; i++) {
+                                        var y = qvars_tmp[i].split('=');
+                                        accessParams[y[0]] = decodeURIComponent(y[1]);
+                                    }
+
+                                    $('#oauthStatus').html('<span style="color:green;">Success!</span>');
+                                    $('#stage-auth').hide();
+                                    $('#stage-data').show();
+                                    oauth.setAccessToken([accessParams.oauth_token, accessParams.oauth_token_secret]);
+
+                                    // Saving token of access in Local_Storage
+                                    var accessData = {};
+                                    accessData.accessTokenKey = accessParams.oauth_token;
+                                    accessData.accessTokenSecret = accessParams.oauth_token_secret;
+
+                                    // Configuring Apps LOCAL_STORAGE
+                                    console.log("TWITTER: Storing token key/secret in localStorage");
+                                    localStorage.setItem(twitterKey, JSON.stringify(accessData));
+
+                                    oauth.get('https://api.twitter.com/1/account/verify_credentials.json?skip_status=true',
+                                            function (data) {
+                                                var entry = JSON.parse(data.text);
+                                                console.log("TWITTER USER: " + entry.screen_name);
+                                                $("#welcome").show();
+                                                document.getElementById("welcome").innerHTML = "welcome " + entry.screen_name;
+                                                successfulLogin();
+                                                // Just for eg.
+                                                app.init();
+                                            },
+                                            function (data) {
+                                                console.log("ERROR: " + data);
+                                            }
+                                    );
+
+                                    // Now we have to close the child browser because everthing goes on track.
+
+                                    window.plugins.childBrowser.close();
+                                },
+                                function (data) {
+                                    console.log(data);
+
+
+                                }
+                        );
+                    }
+                    else {
+                        // Just Empty
+                    }
+                },
+                tweet: function () {
+                    var storedAccessData, rawData = localStorage.getItem(twitterKey);
+
+                    storedAccessData = JSON.parse(rawData); // Paring Json
+                    options.accessTokenKey = storedAccessData.accessTokenKey; // it will be saved on first signin
+                    options.accessTokenSecret = storedAccessData.accessTokenSecret; // it will be save on first login
+
+                    // javascript OAuth will care of else for app we need to send only the options
+                    oauth = OAuth(options);
+                    oauth.get('https://api.twitter.com/1/account/verify_credentials.json?skip_status=true',
+                            function (data) {
+                                var entry = JSON.parse(data.text);
+                                Twitter.post();
+                            }
+                    );
+                },
+                /*
+                 We now have the data to tweet
+                 */
+                post: function () {
+                    var theTweet = $("#tweet").val(); // You can change it with what else you likes.
+
+                    oauth.post('https://api.twitter.com/1/statuses/update.json',
+                            {'status': theTweet, // javascript OAuth encodes this
+                                'trim_user': 'true'},
+                    function (data) {
+                        var entry = JSON.parse(data.text);
+                        console.log(entry);
+
+                        // just for eg.
+                        done();
+                    },
+                            function (data) {
+                                console.log(data);
+                            }
+                    );
+                }
+
+            }
+
+            function done() {
+                $("#tweet").val('');
+            }
+
+
+            function successfulLogin() {
+                $("#loginBtn").hide();
+                $("#logoutBtn,#tweet,#tweeter,#tweetBtn,#tweetText").show();
+
+            }
+
+            function logOut() {
+                //localStorage.clear();
+                window.localStorage.removeItem(twitterKey);
+                document.getElementById("welcome").innerHTML = "Please Login to use this app";
+                $("#loginBtn").show();
+                $("#logoutBtn,#tweet,#tweeter,#tweetText,#tweetBtn").hide();
+
+            }
+
+        </script>
+        <!--Code for Twitter ends here-->
     </head>
-    <body>
-
-        <!-- Page: home  -->
-        <div id="home" data-role="page" style="background:#069;">
-            <span class="ios-status-bar"></span>
-            <div data-role="header" data-theme="b" data-fullscreen="false">
-                <a class="ui-btn ui-icon-gear ui-btn-icon-notext ui-corner-all" href="#config" data-transition="slide" data-direction="reverse"></a>
-                <h3>Tap to Publish</h3>
-            </div>
-            <div role="main" class="ui-content">
-                <div id="home_login">
-
-                </div>
-
-                <div id="home_no_login">
-                    <button class="btn btn-block" onclick="getInfo()" style="display: none;">Get My Info</button>
-                    <div id="user">
-                        <img id="userPic" width="50" height="50" src="css/images/ajax-loader2.gif" />
-                        <p id="userName"></p>
-                    </div>
-                    <hr/>
-
-                    <textarea id="Message" placeholder="What's on your mind?" rows="10"></textarea>
-                    
-                    <div class="ui-field-contain">
-                        <fieldset data-role="controlgroup" data-type="horizontal">
-                            <input type="checkbox" name="to_face" id="to_face" class="my_check">
-                            <label for="to_face" id="to_face_label" class="my_check_label"><img src="img/icon_facebook_gray.png" width="32" /></label>
-
-                            <input type="checkbox" name="to_twitt" id="to_twitt" class="my_check">
-                            <label for="to_twitt" id="to_twitt_label" class="my_check_label"><img src="img/icon_twitter_gray.png" width="32"/></label>
-                        </fieldset>
-                        <div id="length_msg">0</div>
-                    </div>
-                    <button class="btn btn-block" onclick="share()" id="btn_Message" disabled="true">Share</button> 
-                </div>
-                
-                <div id="alert">
-                    <p>Publishing successful</p>
-                </div>
-
-                <div id="viewer_userPic_large">
-                    <input type="button" value="Done"/>
-                    <img id="userPic_large"/>
-                </div>
-
-            </div>
-        </div>
-        <!-- Page: Config  -->
-        <div id="config" data-role="page" style="background:#069;">
-            <span class="ios-status-bar"></span>
-            <div data-role="header" data-theme="b" data-fullscreen="false">
-                <a class="ui-btn ui-icon-home ui-btn-icon-notext ui-corner-all" href="#home" data-transition="slide" id="btn_to_home"></a>
-                <h3>Configuration</h3>
-            </div>
-            <div role="main" class="ui-content">
-
-                <button class="btn btn-block" onclick="loginFB()" id="login_fb">Login with Facebook</button>
-
-                <button class="btn btn-block" onclick="logoutFB()"id="logout_fb">Logout for Facebook</button>
-            </div>
-        </div>
+    <body onload="onBodyLoad()">
 
 
-        <!--cordova.js is automatically injected by the Cordova build process-->
-        <script src="cordova.js"></script>
 
-        <script src="js/vendor/openfb.js"></script>
 
-        <script src="js/main.js"></script>
+
+        <h4>Oodles Twitter App</h4>
+
+        <table border="1">
+            <tr>
+                <th>Login using Twitter</th>
+                <th>
+                    <button id="loginBtn" onclick="Twitter.init()">Login</button>
+                    <button id="logoutBtn" onclick="logOut();">Logout</button>
+                </th>
+            </tr>
+            <tr id="tweetText" style="display:none;">
+                <td colspan="2"><textarea id="tweet" style="display:none;"></textarea></td>
+            </tr>
+            <tr id="tweetBtn" style="display:none;">
+                <td colspan="2" align="right">
+                    <button id="tweeter" onclick="Twitter.tweet();" style="display:none">Tweet</button>
+                </td>
+            </tr>
+            <tr><td colspan="2"><div id="welcome">Please Login to use this app</div></td></tr>
+        </table>
+
 
     </body>
 </html>
+- See more at: http://www.oodlestechnologies.com/blogs/Twitter-integration-on-PhoneGap-using-ChildBrowser-and-OAuth-for-iOS-and-Android-Platforms#sthash.fiLDMFa6.dpuf

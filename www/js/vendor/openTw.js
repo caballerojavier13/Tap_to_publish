@@ -2,8 +2,8 @@
 
 var openTW = (function () {
 
-    var consumerKey = 'dWLNF5yv9bVbZxB7TI87aLjTO';
-    var consumerSecret = 'sUIGOsHZXzcjd0NROvWbH82xrkziU0v4BQlyx18kO3HZxeG8Xx';
+    var consumerKey = 'BN14oi6siiCwG2qXDgEcfXpI4';
+    var consumerSecret = 'qsccXWEEQPtOKErQcGCsK22L0zhgHpKFRpOI0PhF749SuK8NWm';
     var userKey = '';
     var userSecret = '';
 
@@ -19,13 +19,34 @@ var openTW = (function () {
         }
 
         if (window.location.href.indexOf("oauth_token=") > 0) {
+
             userKey = new RegExp('[\?&]oauth_token=([^&#]*)').exec(window.location.href)[1];
             userSecret = new RegExp('[\?&]oauth_verifier=([^&#]*)').exec(window.location.href)[1];
             localStorage.userKey = userKey;
             localStorage.userSecret = userSecret;
         }
-        //window.opener.openFB.oauthCallback(window.location.href);
 
+        var options = {
+            consumerKey: consumerKey,
+            consumerSecret: consumerSecret,
+            callbackUrl: "http://192.168.10.112:8383/HTML5Application/index.html",
+        }
+
+        options.accessTokenKey = userKey;
+        options.accessTokenSecret = userSecret;
+
+        console.log(options);
+        
+        oauth = OAuth(options);
+        oauth.get('https://api.twitter.com/1.1/account/verify_credentials.json?skip_status=true');
+
+
+    }
+    function logout() {
+        localStorage.userKey = '';
+        localStorage.userSecret = '';
+        userKey = '';
+        userSecret = '';
     }
     /*
      Now that we have the information we can Tweet!
@@ -65,6 +86,7 @@ var openTW = (function () {
     return {
         init: init,
         post: post,
+        logout: logout,
         is_login: is_login
     }
 

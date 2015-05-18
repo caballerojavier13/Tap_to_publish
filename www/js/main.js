@@ -1,3 +1,7 @@
+var url_back_end = "http://192.168.10.112:3000";
+
+var url_front_end = "http://192.168.10.112:8383";
+
 // Defaults to sessionStorage for storing the Facebook token
 openFB.init({appId: '1572575729663760'});
 openTW.init();
@@ -10,26 +14,32 @@ function loginFB() {
     openFB.login(
             function (response) {
                 if (response.status === 'connected') {
-                    
+
                 }
             }, {scope: 'email,publish_actions'});
 }
 
 function getInfo() {
     show_loading();
-    openFB.api({
-        path: '/me',
-        success: function (data) {
-            console.log(JSON.stringify(data));
-            $("#userName").html(data.first_name + ' ' + data.middle_name + '<br/>' + data.last_name);
-            document.getElementById("userPic").src = 'http://graph.facebook.com/' + data.id + '/picture?type=small';
-            hide_loading();
-        },
-        error: function (error) {
-            hide_loading();
-            errorHandler(error);
+    if (openFB.is_login()) {
+        openFB.api({
+            path: '/me',
+            success: function (data) {
+                //console.log(JSON.stringify(data));
+                $("#userName").html(data.first_name + ' ' + data.middle_name + '<br/>' + data.last_name);
+                document.getElementById("userPic").src = 'http://graph.facebook.com/' + data.id + '/picture?type=small';
+                hide_loading();
+            },
+            error: function (error) {
+                hide_loading();
+                errorHandler(error);
+            }
+        });
+    } else {
+        if (openTW.is_login()) {
+
         }
-    });
+    }
 }
 function getLargePicture() {
     show_loading();
@@ -48,6 +58,7 @@ function getLargePicture() {
 }
 function share() {
     shareFB();
+    openTW.post();
 }
 function shareFB() {
     if ($("#to_face").prop("checked") && document.getElementById('Message').value !== "") {
@@ -102,7 +113,7 @@ function logoutFB() {
 function errorHandler(error) {
 
     console.log(error.menssage);
- //   alert(error.message);
+    //   alert(error.message);
 }
 
 
@@ -113,11 +124,19 @@ $("#login_fb").on("click", function () {
 $("#login_tw").on("click", function () {
     show_loading();
     $.ajax({
-        url: "http://192.168.10.112:3000/twitter/token",
+        url: url_back_end + "/twitter/token",
         type: "GET"
     })
             .done(function (data) {
-                window.location = data.token;
+                if (data.token.token !== undefined) {
+                    localStorage.userKey = data.token.token;
+                    localStorage.userSecret = data.token.secret;
+                    window.location.reload();
+                }else{
+                    console.log(data);
+                }
+                
+                //window.location = "https://api.twitter.com/oauth/authenticate?oauth_token=" + data.token;
             })
             .fail(function (xhr, error, status) {
                 hide_loading();
@@ -125,6 +144,31 @@ $("#login_tw").on("click", function () {
             .always(function () {
 
             });
+});
+
+$("#logout_tw").on("click", function () {
+    show_loading();
+    localStorage.userKey = '';
+    localStorage.userSecret = '';
+    $("#login_tw").show();
+    $("#logout_tw").hide();
+    openTW.logout();
+    if (openFB.is_login()) {
+        getInfo();
+        $("#login_fb").hide();
+        $("#logout_fb").show();
+    } else {
+        $("#user").hide();
+        $("#login_fb").show();
+        $("#logout_fb").hide();
+    }
+    var login_some = (!(openFB.is_login())) && (!(openTW.is_login()));
+
+    if (login_some) {
+        $("#btn_to_home").hide();
+    }
+    hide_loading();
+
 });
 
 $("#userPic").on("click", function () {
@@ -182,10 +226,10 @@ $(function () {
         $("#login_tw").show();
         $("#logout_tw").hide();
     }
-    
-    var login_some = (!(openFB.is_login()) )&& (!(openTW.is_login()));
-    
-    if(login_some){
+
+    var login_some = (!(openFB.is_login())) && (!(openTW.is_login()));
+
+    if (login_some) {
         $("#btn_to_home").hide();
     }
 });
@@ -224,8 +268,8 @@ $(document).on('pageinit', '#home', function () {
             'reverse': true
         });
     });
-    
-    if(openFB.is_login() || openTW.is_login()){
+
+    if (openFB.is_login() || openTW.is_login()) {
         $(document).on("swipeleft", function () {
             $.mobile.changePage('#home', {
                 'transition': 'slide'
@@ -255,9 +299,9 @@ function control_To_Social() {
 
     if ($("#to_twitt").prop("checked")) {
         $("#to_twitt_label > img").attr("src", "img/icon_twitter.png");
-        $("#Message").attr("maxlength", 254);
-        if ($("#Message").val().length > 254) {
-            $("#Message").val($("#Message").val().slice(0, 254));
+        $("#Message").attr("maxlength", 140);
+        if ($("#Message").val().length > 140) {
+            $("#Message").val($("#Message").val().slice(0, 140));
         }
         fn_message();
         $("#length_msg").show();
