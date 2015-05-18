@@ -28,11 +28,12 @@ var openFB = (function () {
             // Used in the exit event handler to identify if the login has already been processed elsewhere (in the oauthCallback function)
             loginProcessed;
 
-    
+
     if (window.location.href.indexOf("access_token=") > 0) {
         var queryString = window.location.href.substr(window.location.href.indexOf('#') + 1);
         var obj = parseQueryString(queryString);
         tokenStore['fbtoken'] = obj['access_token'];
+        localStorage.tokenStore = tokenStore['fbtoken'];
         //window.opener.openFB.oauthCallback(window.location.href);
     }
 
@@ -134,7 +135,7 @@ var openFB = (function () {
 //        logout();
 
         if (runningInCordova) {
-            oauthRedirectURL = "https://www.facebook.com/connect/login_success.html";
+         //   oauthRedirectURL = "https://www.facebook.com/connect/login_success.html";
         }
 
         startTime = new Date().getTime();
@@ -143,7 +144,7 @@ var openFB = (function () {
         url = FB_LOGIN_URL + '?client_id=' + fbAppId + '&redirect_uri=' + oauthRedirectURL +
                 '&response_type=token&scope=' + scope, '_blank', 'location=no';
 
-        window.location = url
+        window.location = url;
         // If the app is running in Cordova, listen to URL changes in the InAppBrowser until we get a URL with an access_token or an error
 //        if (runningInCordova) {
 //            loginWindow.addEventListener('loadstart', loginWindow_loadStartHandler);
@@ -211,10 +212,13 @@ var openFB = (function () {
         }
 
     }
-    
-    
-    function is_login(){
-         if (tokenStore['fbtoken']) {
+
+
+    function is_login() {
+        if (localStorage.tokenStore !== undefined) {
+            tokenStore['fbtoken'] = localStorage.tokenStore;
+        }
+        if (tokenStore['fbtoken']) {
             return true;
         } else {
             return false;

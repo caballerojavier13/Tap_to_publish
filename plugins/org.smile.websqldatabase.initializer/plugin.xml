@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="org.smile.websqldatabase.initializer"
+        version="0.0.1">
+
+    <name>WebSqlDatabaseInitializer</name>
+    <description>WebSqlDatabase initializer</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,websqldatabase,initializer</keywords>
+
+    <!-- android -->
+    <platform name="android">
+        <source-file target-dir="src/org/smile/websqldatabase" src="src/android/org/smile/websqldatabase/AsyncLoadDatabase.java" />
+        <source-file target-dir="src/org/smile/websqldatabase" src="src/android/org/smile/websqldatabase/DatabaseConfig.java" />
+        <source-file target-dir="src/org/smile/websqldatabase" src="src/android/org/smile/websqldatabase/DatabaseInitializable.java" />
+        <source-file target-dir="src/org/smile/websqldatabase" src="src/android/org/smile/websqldatabase/DatabaseInitializer.java" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <header-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/crypt.h" />
+        <source-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/ioapi.c" />
+        <header-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/ioapi.h" />
+        <source-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/mztools.c" />
+        <header-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/mztools.h" />
+        <source-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/unzip.c" />
+        <header-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/unzip.h" />
+        <source-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/zip.c" />
+        <header-file target-dir="ZipArchive/minizip" src="src/ios/ZipArchive/minizip/zip.h" />
+        <header-file target-dir="ZipArchive" src="src/ios/ZipArchive/ZipArchive.h" />
+        <source-file target-dir="ZipArchive" src="src/ios/ZipArchive/ZipArchive.mm" compiler-flags="-fno-objc-arc" />
+        <header-file src="src/ios/DatabaseConfig.h" />
+        <source-file src="src/ios/DatabaseConfig.m" />
+        <header-file src="src/ios/LoadDatabase.h" />
+        <source-file src="src/ios/LoadDatabase.m" />
+        <framework src="libz.1.2.5.dylib" weak="true" />
+    </platform>
+
+    <!-- wp7 -->
+    <platform name="wp7">
+        <source-file src="src/wp/SharpGIS.UnZipper.cs" />
+        <source-file src="src/wp/DatabaseLoader.cs" />
+        <dependency id="org.smile.websqldatabase.wpdb" url="https://github.com/Smile-SA/cordova-plugin-websqldatabase" commit="master" />
+    </platform>
+
+    <!-- wp8 -->
+    <platform name="wp8">
+        <source-file src="src/wp/SharpGIS.UnZipper.cs" />
+        <source-file src="src/wp/DatabaseLoader.cs" />
+        <dependency id="org.smile.websqldatabase.wpdb" url="https://github.com/Smile-SA/cordova-plugin-websqldatabase" commit="master" />
+    </platform>
+</plugin>

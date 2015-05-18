@@ -67,6 +67,10 @@
                         {
                             "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.liteglue.SQLitePlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -179,6 +183,15 @@
             "PACKAGE_NAME": "com.coolappz.HTML5Application"
         },
         "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.coolappz.HTML5Application"
+        },
+        "cordova-plugin-twitter": {
+            "PACKAGE_NAME": "com.coolappz.HTML5Application"
+        },
+        "org.smile.websqldatabase.initializer": {
+            "PACKAGE_NAME": "com.coolappz.HTML5Application"
+        },
+        "io.litehelpers.cordova.sqlite": {
             "PACKAGE_NAME": "com.coolappz.HTML5Application"
         }
     },

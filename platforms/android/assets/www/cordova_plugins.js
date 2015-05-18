@@ -420,6 +420,20 @@ module.exports = [
             "navigator.notification",
             "navigator"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-twitter/www/TwitterPlugin.js",
+        "id": "cordova-plugin-twitter.TwitterPlugin",
+        "clobbers": [
+            "Twitter"
+        ]
+    },
+    {
+        "file": "plugins/io.litehelpers.cordova.sqlite/www/SQLitePlugin.js",
+        "id": "io.litehelpers.cordova.sqlite.SQLitePlugin",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -441,7 +455,10 @@ module.exports.metadata =
     "cordova-plugin-network-information": "1.0.1-dev",
     "cordova-plugin-battery-status": "1.0.1-dev",
     "cordova-plugin-vibration": "1.0.1-dev",
-    "cordova-plugin-geolocation": "1.0.1-dev"
+    "cordova-plugin-geolocation": "1.0.1-dev",
+    "cordova-plugin-twitter": "0.6.0",
+    "org.smile.websqldatabase.initializer": "0.0.1",
+    "io.litehelpers.cordova.sqlite": "0.7.8-dev"
 }
 // BOTTOM OF METADATA
 });

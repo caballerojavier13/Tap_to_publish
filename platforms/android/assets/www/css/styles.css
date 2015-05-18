@@ -3,7 +3,7 @@ textarea {
     overflow: auto !important;
     -webkit-overflow-scrolling: touch !important;
     height: 150px !important;
-}​
+}â€‹
 
 body {
     padding: 20px;
@@ -42,7 +42,6 @@ hr {
     float: left;
     margin-right: 10px;
     border-radius: 5px;
-    border: solid 1px black;
 }
 
 #user{
@@ -82,4 +81,68 @@ hr {
     background: #444;
     color: #E0E0E0;
     border: solid 2px gray;
+}
+
+#home{
+
+}
+
+#home_login{
+    display: none;
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    top: calc(15% + 35px);
+    left: 15%;
+    box-shadow: inset 0 0 10px black;
+    border-radius: 10px;
+}
+#home_no_login{
+    display: block;
+}
+input[type=checkbox] {
+    opacity: 0;
+}
+
+.ui-slider-handle-snapping{
+    margin-left: -13px !important;
+}
+.ui-slider-label{height: 30px !important;}
+
+.my_check_label{
+    background: none repeat scroll 0% 0% transparent !important;
+    border: medium none !important;
+    padding: 2px !important;
+}
+
+.my_check_label > img{
+    background: white;
+    border-radius: 50%;
+}
+
+#length_msg{
+    color: white;
+    position: relative;
+    top: -33px;
+    float: right;
+}
+#alert{
+    position: absolute;
+    width: 66%;
+    height: 50%;
+    left: 17%;
+    top: 25%;
+    background: none repeat scroll 0% 0% rgba(0, 0, 0, 0.8);
+    border-radius: 25px;
+    z-index: 1000;    
+    display: none;
+}
+#alert > p{
+    position: relative;
+    top: 70px;
+    text-align: center;
+    color: #FFF;
+    line-height: 44px;
+font-size: 25px;
+    vertical-align: middle;
 }

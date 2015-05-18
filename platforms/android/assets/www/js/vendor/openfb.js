@@ -18,7 +18,8 @@ var openFB = (function () {
             baseURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + context,
             //oauthRedirectURL = baseURL + '/oauthcallback.html',
             oauthRedirectURL = baseURL + '/index.html',
-            logoutRedirectURL = baseURL + '/logoutcallback.html',
+            //logoutRedirectURL = baseURL + '/logoutcallback.html',
+            logoutRedirectURL = baseURL + '/index.html',
             // Because the OAuth login spans multiple processes, we need to keep the login callback function as a variable
             // inside the module instead of keeping it local within the login function.
             loginCallback,
@@ -196,12 +197,13 @@ var openFB = (function () {
         tokenStore.removeItem('fbtoken');
 
         if (token) {
-            logoutWindow = window.open(FB_LOGOUT_URL + '?access_token=' + token + '&next=' + logoutRedirectURL, '_blank', 'location=no');
-            if (runningInCordova) {
-                setTimeout(function () {
-                    logoutWindow.close();
-                }, 700);
-            }
+            logoutWindow = FB_LOGOUT_URL + '?access_token=' + token + '&next=' + logoutRedirectURL, '_blank', 'location=no';
+            window.location = logoutWindow;
+//            if (runningInCordova) {
+//                setTimeout(function () {
+//                    logoutWindow.close();
+//                }, 700);
+//            }
         }
 
         if (callback) {
