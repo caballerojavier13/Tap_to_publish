@@ -73,7 +73,7 @@ var openTW = (function () {
     function post(message) {
 
         $.get(url_back_end + "/twitter/publish?con_key=" + consumerKey + "&con_secret=" + consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret + "&message=" + message, {})
-                .done(function (data) {
+                .done(function () {
                     $("#alert").hide();
                     $("#alert p").text("Publishing successful in Twitter");
                     $("#alert").show();

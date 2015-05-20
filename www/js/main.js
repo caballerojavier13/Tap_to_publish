@@ -1,6 +1,6 @@
 //var url_back_end = "http://192.168.10.112:3000";
 
-var url_back_end ="https://tap-to-publish-back-end.herokuapp.com/";
+var url_back_end = "https://tap-to-publish-back-end.herokuapp.com/";
 
 var url_front_end = "http://192.168.10.112:8383";
 
@@ -39,18 +39,18 @@ function getInfo() {
             }
         });
     } else {
-        
+
         if (openTW.is_login()) {
-            $.get(url_back_end + "/twitter/get_info_user?con_key=" + localStorage.consumerKey + "&con_secret=" + localStorage.consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret,{})
-                .done(function (data) {
-                    console.log(data);
-                    $("#userName").html(data[0].user.name);
-                    document.getElementById("userPic").src = data[0].user.profile_image_url;
-                    hide_loading();
-                })
-                .fail(function (xhr, error, status) {
-                    hide_loading();
-                });
+            $.get(url_back_end + "/twitter/get_info_user?con_key=" + localStorage.consumerKey + "&con_secret=" + localStorage.consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret, {})
+                    .done(function (data) {
+                        console.log(data);
+                        $("#userName").html(data[0].user.name);
+                        document.getElementById("userPic").src = data[0].user.profile_image_url;
+                        hide_loading();
+                    })
+                    .fail(function (xhr, error, status) {
+                        hide_loading();
+                    });
         }
     }
 }
@@ -71,23 +71,23 @@ function getLargePicture() {
 }
 function share() {
     var message = $("#Message").val();
-    
+
     if (message !== "") {
-        show_loading();        
         if ($("#to_twitt").prop("checked")) {
             openTW.post(message);
-        }    
+        }
         if ($("#to_face").prop("checked")) {
             shareFB(message);
         }
         $("#Message").val("");
-        hide_loading();
+        $("#btn_Message").prop("disabled", true);
+
     }
 
 
 }
 function shareFB(message) {
-    
+
     openFB.api({
         method: 'POST',
         path: '/me/feed',
@@ -100,11 +100,11 @@ function shareFB(message) {
             $("#alert").show();
             setTimeout(function () {
                 $("#alert").hide();
-            }, 3000);
+            }, 10000);
 
         },
         error: function (error) {
-            
+
         }
     });
 }
@@ -149,7 +149,6 @@ $("#login_tw").on("click", function () {
     $.ajax({
         url: url_back_end + "/twitter/token?callback=" + window.location,
         type: "GET",
-        
     })
             .done(function (data) {
                 console.log(data);
