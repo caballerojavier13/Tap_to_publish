@@ -9,6 +9,8 @@ var openTW = (function () {
 
 
     function init() {
+        localStorage.consumerKey = consumerKey;
+        localStorage.consumerSecret = consumerSecret;
         console.log(localStorage.userKey);
         if (localStorage.userKey !== undefined) {
             userKey = localStorage.userKey;
@@ -19,11 +21,33 @@ var openTW = (function () {
         }
 
         if (window.location.href.indexOf("oauth_token=") > 0) {
-
+            show_loading();
             userKey = new RegExp('[\?&]oauth_token=([^&#]*)').exec(window.location.href)[1];
-            userSecret = new RegExp('[\?&]oauth_verifier=([^&#]*)').exec(window.location.href)[1];
-            localStorage.userKey = userKey;
-            localStorage.userSecret = userSecret;
+            var verifier = new RegExp('[\?&]oauth_verifier=([^&#]*)').exec(window.location.href)[1];
+
+            $.get(url_back_end + "/twitter/validate_token?oauth_token=" + userKey + "&oauth_verifier=" + verifier + "&oauth_secret=" + userSecret, {})
+                    .done(function (data) {
+                        userKey = data.token.token;
+                        userSecret = data.token.secret;
+                        localStorage.userKey = userKey;
+                        localStorage.userSecret = userSecret;
+                        
+                        User_Id = data.token.params.user_id;
+                        User_Name = data.token.params.user_screen_name;
+                        token_tw = data.token;
+                        
+                        localStorage.User_Id = User_Id;
+                        localStorage.User_Name = User_Name;
+                        localStorage.token_tw = token_tw;
+                        
+                        var url = window.location.pathname.toString();
+                        $(location).attr('href',url);
+                        hide_loading();
+                    })
+                    .fail(function (xhr, error, status) {
+                        hide_loading();
+                    });
+
         }
 
         var options = {
@@ -34,11 +58,6 @@ var openTW = (function () {
 
         options.accessTokenKey = userKey;
         options.accessTokenSecret = userSecret;
-
-        console.log(options);
-        
-        oauth = OAuth(options);
-        oauth.get('https://api.twitter.com/1.1/account/verify_credentials.json?skip_status=true');
 
 
     }
@@ -51,23 +70,21 @@ var openTW = (function () {
     /*
      Now that we have the information we can Tweet!
      */
-    function post() {
-        var theTweet = $("#tweet").val(); // Change this out for what ever you want!
-        alert("Twitt publicado");
-//        oauth.post('https://api.twitter.com/1/statuses/update.json',
-//            { 'status' : theTweet,  // jsOAuth encodes for us
-//            'trim_user' : 'true' },
-//            function(data) {
-//                var entry = JSON.parse(data.text);
-//                alert(entry);
-//
-//                // FOR THE EXAMPLE
-//                app.done();
-//            },
-//            function(data) { 
-//                alert(data);
-//            }
-//        ); 
+    function post(message) {
+
+        $.get(url_back_end + "/twitter/publish?con_key=" + consumerKey + "&con_secret=" + consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret + "&message=" + message, {})
+                .done(function (data) {
+                    $("#alert").hide();
+                    $("#alert p").text("Publishing successful in Twitter");
+                    $("#alert").show();
+                    setTimeout(function () {
+                        $("#alert").hide();
+                    }, 3000);
+                })
+                .fail(function (xhr, error, status) {
+                    
+                });
+
     }
     function is_login() {
         if (localStorage.userKey !== undefined) {
