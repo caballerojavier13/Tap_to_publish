@@ -96,7 +96,7 @@ function shareFB(message) {
         },
         success: function () {
             $("#alert").hide();
-            $("#alert p").text("Publishing successful in Facebook");
+            $("#alert p").text("Publishing successful to Facebook");
             $("#alert").show();
             setTimeout(function () {
                 $("#alert").hide();

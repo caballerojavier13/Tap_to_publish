@@ -123,10 +123,10 @@ input[type=checkbox] {
 }
 
 #length_msg{
-    color: white;
-    position: relative;
-    top: -33px;
-    float: right;
+    color: #FFF;
+    position: absolute;
+    right: 0px;
+    margin-top: 10px;
 }
 #alert{
     position: absolute;
@@ -141,7 +141,7 @@ input[type=checkbox] {
 }
 #alert > p{
     position: relative;
-    top: 70px;
+    top: 56px;
     text-align: center;
     color: #FFF;
     line-height: 44px;

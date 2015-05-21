@@ -75,7 +75,7 @@ var openTW = (function () {
         $.get(url_back_end + "/twitter/publish?con_key=" + consumerKey + "&con_secret=" + consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret + "&message=" + message, {})
                 .done(function () {
                     $("#alert").hide();
-                    $("#alert p").text("Publishing successful in Twitter");
+                    $("#alert p").text("Publishing successful to Twitter");
                     $("#alert").show();
                     setTimeout(function () {
                         $("#alert").hide();
