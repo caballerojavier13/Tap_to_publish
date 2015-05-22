@@ -13,20 +13,9 @@ openTW.init();
 //  Uncomment the line below to store the Facebook token in localStorage instead of sessionStorage
 //  openFB.init({appId: 'YOUR_FB_APP_ID', tokenStore: window.localStorage});
 
-
-
-function loginFB() {
-    openFB.login(
-            function (response) {
-                if (response.status === 'connected') {
-
-                }
-            }, {scope: 'email,publish_actions'});
-}
-
 function getInfo() {
-    show_loading();
     if (openFB.is_login()) {
+        show_loading();
         openFB.api({
             path: '/me',
             success: function (data) {
@@ -39,11 +28,10 @@ function getInfo() {
             }
         });
     } else {
-
         if (openTW.is_login()) {
+            show_loading();
             $.get(url_back_end + "/twitter/get_info_user?con_key=" + localStorage.consumerKey + "&con_secret=" + localStorage.consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret, {})
-                    .done(function (data) {
-                        console.log(data);
+                    .done(function (data){
                         $("#userName").html(data[0].user.name);
                         document.getElementById("userPic").src = data[0].user.profile_image_url;
                         hide_loading();
@@ -80,65 +68,13 @@ function share() {
             shareFB(message);
         }
         $("#Message").val("");
+        fn_message();
         $("#btn_Message").prop("disabled", true);
 
     }
 
 
 }
-function shareFB(message) {
-
-    openFB.api({
-        method: 'POST',
-        path: '/me/feed',
-        params: {
-            message: message
-        },
-        success: function () {
-            $("#alert").hide();
-            $("#alert p").text("Publishing successful to Facebook");
-            $("#alert").show();
-            setTimeout(function () {
-                $("#alert").hide();
-            }, 10000);
-
-        },
-        error: function (error) {
-
-        }
-    });
-}
-
-function revoke() {
-    openFB.revokePermissions(
-            function () {
-                alert('Permissions revoked');
-            },
-            errorHandler);
-}
-
-function logoutFB() {
-    openFB.logout(
-            function () {
-                if (openFB.is_login()) {
-                    getInfo();
-                    $("#login_fb").hide();
-                    $("#logout_fb").show();
-                } else {
-                    $("#user").hide();
-                    $("#login_fb").show();
-                    $("#logout_fb").hide();
-                }
-            },
-            errorHandler);
-}
-
-function errorHandler(error) {
-
-    console.log(error.menssage);
-    //   alert(error.message);
-}
-
 
 $("#login_fb").on("click", function () {
     show_loading();
@@ -250,30 +186,6 @@ $(function () {
         $("#btn_to_home").hide();
     }
 });
-
-
-$.urlParam = function (name) {
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results == null) {
-        return null;
-    }
-    else {
-        return results[1] || 0;
-    }
-}
-
-function show_loading() {
-    $.mobile.loading('show', {
-        text: 'Loading',
-        textVisible: true,
-        theme: 'b',
-        textonly: false
-    });
-}
-
-function hide_loading() {
-    $.mobile.loading('hide');
-}
 
 
 var pages = ['home', 'config'];

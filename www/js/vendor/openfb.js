@@ -314,3 +314,60 @@ var openFB = (function () {
     }
 
 }());
+
+
+function shareFB(message) {
+
+    openFB.api({
+        method: 'POST',
+        path: '/me/feed',
+        params: {
+            message: message
+        },
+        success: function () {
+            $("#alert").hide();
+            $("#alert p").text("Publishing successful to Facebook");
+            $("#alert").show();
+            setTimeout(function () {
+                $("#alert").hide();
+            }, 10000);
+
+        },
+        error: function (error) {
+
+        }
+    });
+}
+
+function revoke() {
+    openFB.revokePermissions(
+            function () {
+                alert('Permissions revoked');
+            },
+            errorHandler);
+}
+
+function logoutFB() {
+    openFB.logout(
+            function () {
+                if (openFB.is_login()) {
+                    getInfo();
+                    $("#login_fb").hide();
+                    $("#logout_fb").show();
+                } else {
+                    $("#user").hide();
+                    $("#login_fb").show();
+                    $("#logout_fb").hide();
+                }
+            },
+            errorHandler);
+}
+
+function loginFB() {
+    openFB.login(
+            function (response) {
+                if (response.status === 'connected') {
+
+                }
+            }, {scope: 'email,publish_actions'});
+}

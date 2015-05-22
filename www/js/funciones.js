@@ -8,3 +8,22 @@ $.urlParam = function (name) {
         return results[1] || 0;
     }
 }
+
+function errorHandler(error) {
+    
+}
+
+function show_loading() {
+    $("#loading").show();
+    $.mobile.loading('show', {
+        text: 'Loading',
+        textVisible: true,
+        theme: 'b',
+        textonly: false
+    });
+}
+
+function hide_loading() {
+    $("#loading").hide();
+    $.mobile.loading('hide');
+}

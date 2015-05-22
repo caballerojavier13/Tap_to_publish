@@ -30,7 +30,7 @@ hr {
     position: fixed;
     width: 100%;    
     height: 20px;    
-    background: black;
+    background: #505050;
     z-index: 10;
 }
 
@@ -147,4 +147,14 @@ input[type=checkbox] {
     line-height: 44px;
 font-size: 25px;
     vertical-align: middle;
+}
+
+#loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 200;
 }
