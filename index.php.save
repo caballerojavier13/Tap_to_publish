@@ -1,3 +1,0 @@
-<?php
-http_redirect("./www/index.html", , true, HTTP_REDIRECT_PERM);
-?>

@@ -82,9 +82,8 @@
     },
     "cordova-plugin-splashscreen": {
         "source": {
-            "type": "git",
-            "url": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-splashscreen.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "cordova-plugin-splashscreen"
         },
         "is_top_level": true,
         "variables": {}
@@ -100,9 +99,8 @@
     },
     "cordova-plugin-dialogs": {
         "source": {
-            "type": "git",
-            "url": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-dialogs.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "cordova-plugin-dialogs"
         },
         "is_top_level": true,
         "variables": {}
@@ -173,6 +171,14 @@
             "type": "git",
             "url": "https://github.com/brodysoft/Cordova-SQLitePlugin",
             "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.dialogs"
         },
         "is_top_level": true,
         "variables": {}

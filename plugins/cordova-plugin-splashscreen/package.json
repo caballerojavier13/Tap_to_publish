@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-splashscreen",
-  "version": "2.0.1-dev",
+  "version": "2.0.0",
   "description": "Cordova Splashscreen Plugin",
   "cordova": {
     "id": "cordova-plugin-splashscreen",
@@ -10,6 +10,7 @@
       "ubuntu",
       "ios",
       "blackberry10",
+      "wp7",
       "wp8",
       "windows8",
       "windows",
@@ -29,6 +30,7 @@
     "cordova-ubuntu",
     "cordova-ios",
     "cordova-blackberry10",
+    "cordova-wp7",
     "cordova-wp8",
     "cordova-windows8",
     "cordova-windows",

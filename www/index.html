@@ -2,14 +2,24 @@
 <html>
     <head>
         <meta charset="utf-8">
+        
         <title>Tap to Publish</title>
+        
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        
         <link rel="stylesheet" href="css/ratchet.css">
+        
         <link rel="stylesheet" href="css/styles.css">
+        
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        
         <link href="css/jquery.mobile-git.css" rel="stylesheet" type="text/css" />
+        
         <script src="js/vendor/jquery.min.js"></script>
+        
         <script src="js/vendor/jquery.mobile-1.4.5.min.js"></script>
+        
+        
     </head>
     <body>
 
@@ -17,15 +27,11 @@
         <div id="home" data-role="page" style="background:#069;">
             <span class="ios-status-bar"></span>
             <div data-role="header" data-theme="b" data-fullscreen="false">
-                <a class="ui-btn ui-icon-gear ui-btn-icon-notext ui-corner-all" href="#config" data-transition="slide" data-direction="reverse"></a>
+                <a class="ui-btn ui-icon-gear ui-btn-icon-notext ui-corner-all btn-head" href="#config" data-transition="slide" data-direction="reverse"></a>
                 <h3>Tap to Publish</h3>
             </div>
             <div role="main" class="ui-content">
-                <div id="home_login">
-
-                </div>
-
-                <div id="home_no_login">
+                <div>
                     <button class="btn btn-block" onclick="getInfo()" style="display: none;">Get My Info</button>
                     <div id="user">
                         <img id="userPic" width="50" height="50" src="css/images/ajax-loader2.gif" />
@@ -64,14 +70,14 @@
         <div id="config" data-role="page" style="background:#069;">
             <span class="ios-status-bar"></span>
             <div data-role="header" data-theme="b" data-fullscreen="false">
-                <a class="ui-btn ui-icon-home ui-btn-icon-notext ui-corner-all" href="#home" data-transition="slide" id="btn_to_home"></a>
+                <a class="ui-btn ui-icon-home ui-btn-icon-notext ui-corner-all btn-head" href="#home" data-transition="slide" id="btn_to_home"></a>
                 <h3>Configuration</h3>
             </div>
             <div role="main" class="ui-content">
 
-                <button class="btn btn-block" onclick="loginFB()" id="login_fb">Login with Facebook</button>
+                <button class="btn btn-block" id="login_fb">Login with Facebook</button>
 
-                <button class="btn btn-block" onclick="logoutFB()"id="logout_fb">Logout for Facebook</button>
+                <button class="btn btn-block" id="logout_fb">Logout for Facebook</button>
                 
                 <button class="btn btn-block" id="login_tw">Login with Twitter</button>
                 
@@ -82,7 +88,7 @@
 
 
         <!--cordova.js is automatically injected by the Cordova build process-->
-        <!--<script src="cordova.js"></script>-->
+        <script src="cordova.js"></script>
 
         <script src="js/funciones.js"></script>
         

@@ -11,14 +11,16 @@ var openTW = (function () {
     function init() {
         localStorage.consumerKey = consumerKey;
         localStorage.consumerSecret = consumerSecret;
-        console.log(localStorage.userKey);
-        if (localStorage.userKey !== undefined) {
+        
+        if (localStorage.userKey !== "") {
             userKey = localStorage.userKey;
         }
-        console.log(localStorage.userSecret);
-        if (localStorage.userSecret !== undefined) {
+        //console.log(localStorage.userKey);
+        
+        if (localStorage.userSecret !== "") {
             userSecret = localStorage.userSecret;
         }
+        //console.log(localStorage.userSecret);
 
         if (window.location.href.indexOf("oauth_token=") > 0) {
             show_loading();
@@ -50,22 +52,13 @@ var openTW = (function () {
 
         }
 
-        var options = {
-            consumerKey: consumerKey,
-            consumerSecret: consumerSecret,
-            callbackUrl: "http://192.168.10.112:8383/HTML5Application/index.html",
-        }
-
-        options.accessTokenKey = userKey;
-        options.accessTokenSecret = userSecret;
-
-
     }
     function logout() {
         localStorage.userKey = '';
         localStorage.userSecret = '';
         userKey = '';
         userSecret = '';
+        window.location.reload();
     }
     /*
      Now that we have the information we can Tweet!
@@ -87,13 +80,9 @@ var openTW = (function () {
 
     }
     function is_login() {
-        if (localStorage.userKey !== undefined) {
-            userKey = localStorage.userKey;
-        }
-        if (localStorage.userSecret !== undefined) {
-            userSecret = localStorage.userSecret;
-        }
-        if (userKey.length > 0) {
+        userKey = localStorage.userKey;
+        userSecret = localStorage.userSecret;
+        if (userKey) {
             return true;
         } else {
             return false;
