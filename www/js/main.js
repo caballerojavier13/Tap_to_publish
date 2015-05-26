@@ -1,8 +1,7 @@
-$(document).on("pagecreate",function(){
-        fix_visual_io7();
-    });
-$(function () {   
-
+$(document).on("pagecreate", function () {
+    fix_visual_io7();
+});
+$(function () {
     $(document).delegate("#home", "pageshow", function () {
         fix_visual_io7();
     });
@@ -26,14 +25,14 @@ function fix_visual_io7() {
         } else {
             $(".ios-status-bar").hide();
         }
-    }else{
+    } else {
         $(".ios-status-bar").hide();
     }
 }
 
 //var url_back_end = "http://192.168.10.112:3000";
 
-var url_back_end = "https://tap-to-publish-back-end.herokuapp.com/";
+var url_back_end = "https://tap-to-publish-back-end.herokuapp.com";
 
 var url_front_end = "http://192.168.10.112:8383";
 
@@ -63,9 +62,13 @@ function getInfo() {
             show_loading();
             $.get(url_back_end + "/twitter/get_info_user?con_key=" + localStorage.consumerKey + "&con_secret=" + localStorage.consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret, {})
                     .done(function (data) {
-                        $("#userName").html(data[0].user.name);
-                        document.getElementById("userPic").src = data[0].user.profile_image_url;
-                        hide_loading();
+                        if (data.errors[0].code == 89) {
+                            openTW.logout();
+                        } else {
+                            $("#userName").html(data[0].user.name);
+                            document.getElementById("userPic").src = data[0].user.profile_image_url;
+                            hide_loading();
+                        }
                     })
                     .fail(function (xhr, error, status) {
                         hide_loading();
@@ -201,6 +204,7 @@ $("#login_fb").on("click", function () {
     loginFB();
 });
 $("#logout_fb").on("click", function () {
+    show_loading();
     logoutFB();
 });
 $("#login_tw").on("click", function () {
