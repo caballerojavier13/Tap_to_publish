@@ -3,10 +3,11 @@ textarea {
     overflow: auto !important;
     -webkit-overflow-scrolling: touch !important;
     height: 150px !important;
-}â€‹
+}
 
 body {
     padding: 20px;
+    background: black;
 }
 
 hr {
@@ -17,20 +18,21 @@ hr {
 }
 
 .ui-header{
-    padding-top: 26px;
+    padding-top: 6px;
 }
 
 .ui-header > .ui-btn{
-    top: 30px !important;
+    top: 8px !important;
     left: 16px !important;
+    z-index: 70;
 }
 
 .ios-status-bar{
     position: fixed;
     width: 100%;    
     height: 20px;    
-    background: black;
-    z-index: 10;
+    background: #505050;
+    z-index: 80;
 }
 
 #userName{
@@ -58,6 +60,7 @@ hr {
     left: 0;
     background: black;
     display: none;
+    z-index: 100;
 }
 
 #userPic_large{
@@ -121,10 +124,10 @@ input[type=checkbox] {
 }
 
 #length_msg{
-    color: white;
-    position: relative;
-    top: -33px;
-    float: right;
+    color: #FFF;
+    position: absolute;
+    right: 0px;
+    margin-top: 10px;
 }
 #alert{
     position: absolute;
@@ -139,10 +142,20 @@ input[type=checkbox] {
 }
 #alert > p{
     position: relative;
-    top: 70px;
+    top: 56px;
     text-align: center;
     color: #FFF;
     line-height: 44px;
 font-size: 25px;
     vertical-align: middle;
+}
+
+#loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 200;
 }

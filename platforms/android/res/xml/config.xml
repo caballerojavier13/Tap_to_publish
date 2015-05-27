@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.coolappz.HTML5Application" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.coolappz.TapToPublish" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <feature name="File">
         <param name="android-package" value="org.apache.cordova.file.FileUtils" />
@@ -48,7 +48,10 @@
     <feature name="Vibration">
         <param name="android-package" value="org.apache.cordova.vibration.Vibration" />
     </feature>
-    <name>HTML5Application</name>
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="io.liteglue.SQLitePlugin" />
+    </feature>
+    <name>Tap to Publish</name>
     <description>
     </description>
     <author email="caballerojavier13@gmail.com" href="http://www.javiercaballero.com.ar">
@@ -56,7 +59,8 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <feature name="SQLitePlugin">
-        <param name="android-package" value="io.liteglue.SQLitePlugin" />
-    </feature>
+    <preference name="useBrowserHistory" value="true" />
+    <preference name="exit-on-suspend" value="false" />
+    <preference name="fullscreen" value="true" />
+    <preference name="webviewbounce" value="true" />
 </widget>

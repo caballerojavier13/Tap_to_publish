@@ -12,8 +12,8 @@ var openFB = (function () {
     var FB_LOGIN_URL = 'https://www.facebook.com/dialog/oauth',
             FB_LOGOUT_URL = 'https://www.facebook.com/logout.php',
             // By default we store fbtoken in sessionStorage. This can be overridden in init()
-            tokenStore = window.sessionStorage,
-            fbAppId,
+            face_token = localStorage.face_token,
+            fbAppId = localStorage.fbAppId,
             context = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)),
             baseURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + context,
             //oauthRedirectURL = baseURL + '/oauthcallback.html',
@@ -28,11 +28,12 @@ var openFB = (function () {
             // Used in the exit event handler to identify if the login has already been processed elsewhere (in the oauthCallback function)
             loginProcessed;
 
-    
+
     if (window.location.href.indexOf("access_token=") > 0) {
         var queryString = window.location.href.substr(window.location.href.indexOf('#') + 1);
         var obj = parseQueryString(queryString);
-        tokenStore['fbtoken'] = obj['access_token'];
+        localStorage.face_token  = obj['access_token'];
+        localStorage.face_token = localStorage.face_token ;
         //window.opener.openFB.oauthCallback(window.location.href);
     }
 
@@ -48,17 +49,18 @@ var openFB = (function () {
      * use any other function.
      * @param params - init paramters
      *  appId: The id of the Facebook app,
-     *  tokenStore: The store used to save the Facebook token. Optional. If not provided, we use sessionStorage.
+     *  localStorage.face_token: The store used to save the Facebook token. Optional. If not provided, we use sessionStorage.
      */
     function init(params) {
         if (params.appId) {
             fbAppId = params.appId;
+            localStorage.fbAppId = fbAppId;
         } else {
             throw 'appId parameter not set in init()';
         }
 
-        if (params.tokenStore) {
-            tokenStore = params.tokenStore;
+        if (params.face_token) {
+            localStorage.face_token = params.face_token;
         }
     }
 
@@ -67,7 +69,7 @@ var openFB = (function () {
      * @param callback the function that receives the loginstatus
      */
     function getLoginStatus(callback) {
-        var token = tokenStore['fbtoken'],
+        var token = localStorage.face_token ,
                 loginStatus = {};
         if (token) {
             loginStatus.status = 'connected';
@@ -134,16 +136,16 @@ var openFB = (function () {
 //        logout();
 
         if (runningInCordova) {
-            oauthRedirectURL = "https://www.facebook.com/connect/login_success.html";
+            //   oauthRedirectURL = "https://www.facebook.com/connect/login_success.html";
         }
 
         startTime = new Date().getTime();
 //        loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + fbAppId + '&redirect_uri=' + oauthRedirectURL +
 //                '&response_type=token&scope=' + scope, '_blank', 'location=no');
-        url = FB_LOGIN_URL + '?client_id=' + fbAppId + '&redirect_uri=' + oauthRedirectURL +
+        url = FB_LOGIN_URL + '?client_id=' + fbAppId + '&redirect_uri=' + logoutRedirectURL +
                 '&response_type=token&scope=' + scope, '_blank', 'location=no';
 
-        window.location = url
+        window.location = url;
         // If the app is running in Cordova, listen to URL changes in the InAppBrowser until we get a URL with an access_token or an error
 //        if (runningInCordova) {
 //            loginWindow.addEventListener('loadstart', loginWindow_loadStartHandler);
@@ -169,7 +171,7 @@ var openFB = (function () {
         if (url.indexOf("access_token=") > 0) {
             queryString = url.substr(url.indexOf('#') + 1);
             obj = parseQueryString(queryString);
-            tokenStore['fbtoken'] = obj['access_token'];
+            localStorage.face_token  = obj['access_token'];
             if (loginCallback)
                 loginCallback({status: 'connected', authResponse: {token: obj['access_token']}});
 
@@ -190,15 +192,15 @@ var openFB = (function () {
      *
      */
     function logout(callback) {
-        var logoutWindow,
-                token = tokenStore['fbtoken'];
 
         /* Remove token. Will fail silently if does not exist */
-        tokenStore.removeItem('fbtoken');
-
-        if (token) {
-            logoutWindow = FB_LOGOUT_URL + '?access_token=' + token + '&next=' + logoutRedirectURL, '_blank', 'location=no';
-            window.location = logoutWindow;
+        localStorage.face_token = '';
+        
+        face_token = localStorage.face_token;
+        window.location.reload();
+        if(face_token !== '' ) {
+            //logoutWindow = FB_LOGOUT_URL + '?access_token=' + token + '&next=' + logoutRedirectURL, '_blank', 'location=no';
+            
 //            if (runningInCordova) {
 //                setTimeout(function () {
 //                    logoutWindow.close();
@@ -211,10 +213,12 @@ var openFB = (function () {
         }
 
     }
-    
-    
-    function is_login(){
-         if (tokenStore['fbtoken']) {
+
+
+    function is_login() {
+        var face_token = localStorage.face_token;
+        
+        if (face_token) {
             return true;
         } else {
             return false;
@@ -237,7 +241,7 @@ var openFB = (function () {
                 xhr = new XMLHttpRequest(),
                 url;
 
-        params['access_token'] = tokenStore['fbtoken'];
+        params['access_token'] = localStorage.face_token ;
 
         url = 'https://graph.facebook.com' + obj.path + '?' + toQueryString(params);
 
@@ -268,7 +272,7 @@ var openFB = (function () {
         return api({method: 'DELETE',
             path: '/me/permissions',
             success: function () {
-                tokenStore['fbtoken'] = undefined;
+                localStorage.face_token  = undefined;
                 success();
             },
             error: error});
@@ -309,3 +313,60 @@ var openFB = (function () {
     }
 
 }());
+
+
+function shareFB(message) {
+
+    openFB.api({
+        method: 'POST',
+        path: '/me/feed',
+        params: {
+            message: message
+        },
+        success: function () {
+            $("#alert").hide();
+            $("#alert p").text("Publishing successful to Facebook");
+            $("#alert").show();
+            setTimeout(function () {
+                $("#alert").hide();
+            }, 10000);
+
+        },
+        error: function (error) {
+
+        }
+    });
+}
+
+function revoke() {
+    openFB.revokePermissions(
+            function () {
+                alert('Permissions revoked');
+            },
+            errorHandler);
+}
+
+function logoutFB() {
+    openFB.logout(
+            function () {
+                if (openFB.is_login()) {
+                    getInfo();
+                    $("#login_fb").hide();
+                    $("#logout_fb").show();
+                } else {
+                    $("#user").hide();
+                    $("#login_fb").show();
+                    $("#logout_fb").hide();
+                }
+            },
+            errorHandler);
+}
+
+function loginFB() {
+    openFB.login(
+            function (response) {
+                if (response.status === 'connected') {
+
+                }
+            }, {scope: 'email,publish_actions'});
+}

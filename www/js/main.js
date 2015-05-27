@@ -16,9 +16,12 @@ function fix_visual_io7() {
             if (navigator.userAgent.match(/\b[0-9]+_[0-9]+(?:_[0-9]+)?\b/)[0].split('_')[0] > 6) {
                 $(".ios-status-bar").show();
                 $(".ui-header").css("padding-top", "26px");
-                $(".btn-head").css({"position": "relative"});
-                $(".ui-header > h3").css("position", "relative");
-                $(".ui-header > h3").css("margin-top", "-22px");
+                if(some_login()){
+                //if ($(".btn-head").is(":visible")) {
+                    $(".btn-head").css("position", "relative");
+                    $(".ui-header > h3").css("position", "relative");
+                    $(".ui-header > h3").css("margin-top", "-22px");
+                }
             } else {
                 $(".ios-status-bar").hide();
             }
@@ -62,8 +65,12 @@ function getInfo() {
             show_loading();
             $.get(url_back_end + "/twitter/get_info_user?con_key=" + localStorage.consumerKey + "&con_secret=" + localStorage.consumerSecret + "&userKey=" + localStorage.userKey + "&userSecret=" + localStorage.userSecret, {})
                     .done(function (data) {
-                        if (data.errors[0].code == 89) {
-                            openTW.logout();
+                        if (data.errors !== undefined) {
+                            if (data.errors[0].code == 89) {
+                                openTW.logout();
+                            } else {
+                                openTW.logout();
+                            }
                         } else {
                             $("#userName").html(data[0].user.name);
                             document.getElementById("userPic").src = data[0].user.profile_image_url;
@@ -247,7 +254,9 @@ $("#logout_tw").on("click", function () {
 });
 
 $("#userPic").on("click", function () {
-    getLargePicture();
+    if (openFB.is_login()) {
+        getLargePicture();
+    }
 });
 
 $("#viewer_userPic_large > input").on("click", function () {
@@ -303,3 +312,10 @@ function hide_loading() {
     $.mobile.loading('hide');
 }
 
+function some_login(){
+    if(openFB.is_login() || openTW.is_login()){
+        return true;
+    }else{
+        return false;
+    }
+}
